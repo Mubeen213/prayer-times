@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { AdminLayout } from '../components/AdminLayout'
-import { Login } from '../pages/Login'
+import { Login } from './Login'
 // import { Dashboard } from '../pages/Dashboard'
 // import { ProtectedRoute } from '../components/ProtectedRoute'
 
@@ -9,6 +9,7 @@ export default function AdminApp() {
     <Routes>
       <Route path='/login' element={<Login />} />
       <Route
+        path='/'
         element={
           //   <ProtectedRoute>
           <AdminLayout />
