@@ -13,6 +13,8 @@ export const validateMosqueOwnership = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    console.log('req.admin', req.admin)
+    console.log('req.params', req.params)
     if (req.admin?.mosqueId !== req.params.mosqueId) {
       res.status(403).json({ error: 'Unauthorized access to this mosque' })
       return
