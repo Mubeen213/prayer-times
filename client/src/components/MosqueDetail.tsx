@@ -1,62 +1,67 @@
-import { Mosque } from '../types'
-
-const DUMMY_MOSQUE: Mosque = {
-  id: '1',
-  name: 'Central Mosque',
-  location: {
-    address: '123 Main Street',
-    landmark: 'Near City Park',
-    city: 'Downtown',
-    state: 'State',
-    country: 'Country',
-  },
-  prayerTimings: {
-    fajr: '05:30',
-    dhuhr: '13:30',
-    asr: '16:45',
-    maghrib: '19:15',
-    isha: '20:45',
-    juma: '13:30',
-  },
-}
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useMosque } from '../hooks/useMosques'
+import { MosqueTiming } from './MosqueTiming'
+import { MosqueEvents } from './MosqueEvents'
 
 export const MosqueDetail = () => {
+  const [activeTab, setActiveTab] = useState<'timings' | 'events'>('timings')
+
+  const { id = '' } = useParams<{ id: string }>()
+  const { data: mosque, isLoading: isLoadingMosque } = useMosque(id)
+
+  if (isLoadingMosque) {
+    return (
+      <div className='bg-white rounded-lg shadow-sm p-6 animate-pulse'>
+        <div className='h-8 bg-gray-200 rounded w-1/3 mb-4'></div>
+        <div className='space-y-2'>
+          <div className='h-4 bg-gray-200 rounded w-2/3'></div>
+          <div className='h-4 bg-gray-200 rounded w-1/2'></div>
+        </div>
+      </div>
+    )
+  }
+  if (!mosque) return null
+
   return (
     <div className='bg-white rounded-lg shadow-sm'>
       {/* Mosque Header */}
       <div className='p-6 border-b'>
-        <h1 className='text-2xl font-bold text-gray-900'>
-          {DUMMY_MOSQUE.name}
-        </h1>
+        <h1 className='text-2xl font-bold text-gray-900'>{mosque.name}</h1>
         <div className='mt-2 text-gray-500'>
-          <p>{DUMMY_MOSQUE.location.address}</p>
-          <p className='text-sm'>{DUMMY_MOSQUE.location.landmark}</p>
+          <p>{mosque.location.address}</p>
+          {mosque.location.landmark && (
+            <p className='text-sm'>{mosque.location.landmark}</p>
+          )}
           <p className='text-sm'>
-            {DUMMY_MOSQUE.location.city}, {DUMMY_MOSQUE.location.state}
+            {mosque.location.city}, {mosque.location.state}
           </p>
         </div>
       </div>
-
-      {/* Prayer Times */}
-      <div className='p-6'>
-        <h2 className='text-lg font-semibold mb-4'>Prayer Times</h2>
-        <div className='grid grid-cols-2 sm:grid-cols-5 gap-4'>
-          {Object.entries(DUMMY_MOSQUE.prayerTimings).map(([prayer, time]) => (
-            <div key={prayer} className='bg-gray-50 p-4 rounded-lg text-center'>
-              <div className='text-sm text-gray-500 capitalize'>{prayer}</div>
-              <div className='font-semibold mt-1'>{time}</div>
-            </div>
+      {/* Tabs */}
+      <div className='border-b'>
+        <div className='flex gap-4 px-6'>
+          {['timings', 'events'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as 'timings' | 'events')}
+              className={`py-4 px-2 border-b-2 text-sm font-medium ${
+                activeTab === tab
+                  ? 'border-green-500 text-green-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
           ))}
         </div>
       </div>
-
-      {/* Upcoming Events */}
-      <div className='p-6 border-t'>
-        <h2 className='text-lg font-semibold mb-4'>Upcoming Events</h2>
-        <div className='space-y-4'>
-          {/* We'll add events here later */}
-          <div className='text-gray-500 text-sm'>No upcoming events</div>
-        </div>
+      <div className='p-6'>
+        {activeTab === 'timings' ? (
+          <MosqueTiming mosque={mosque} />
+        ) : (
+          <MosqueEvents mosqueId={id} isVisible={activeTab === 'events'} />
+        )}
       </div>
     </div>
   )

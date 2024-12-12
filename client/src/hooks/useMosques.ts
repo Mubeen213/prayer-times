@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../config/axios'
 import { MosquesResponse } from '../types/mosque'
+import { Mosque } from '../types/mosque'
 
 interface MosqueQueryParams {
   search?: string
@@ -30,5 +31,29 @@ export const useMosques = (params: MosqueQueryParams = {}) => {
     placeholderData: (previousData) => previousData,
     enabled: true,
     staleTime: 0,
+  })
+}
+
+export const useMosque = (mosqueId: string) => {
+  return useQuery({
+    queryKey: ['mosque', mosqueId],
+    queryFn: async () => {
+      const { data } = await api.get<Mosque>(`/mosques/${mosqueId}`)
+      return data
+    },
+  })
+}
+
+export const useMosqueEvents = (mosqueId: string, enabled: boolean) => {
+  return useQuery({
+    queryKey: ['mosque-events', mosqueId],
+    queryFn: async () => {
+      const { data } = await api.get(`/events/${mosqueId}`)
+      return data
+    },
+    enabled: enabled,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    retry: 1,
   })
 }

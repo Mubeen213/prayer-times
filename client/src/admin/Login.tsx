@@ -15,7 +15,7 @@ export const Login = () => {
     try {
       // Add auth logic here
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      navigate('/admin/dashboard')
+      navigate('/admin')
     } catch (error) {
       console.error(error)
       toast.error('Invalid credentials')

@@ -8,7 +8,7 @@ export default function PublicApp() {
     <Routes>
       <Route element={<PublicLayout />}>
         <Route index element={<MosquePage />} />
-        <Route path='/mosque/:id' element={<MosqueDetail />} />
+        <Route path='/mosques/:id' element={<MosqueDetail />} />
       </Route>
     </Routes>
   )
