@@ -14,12 +14,30 @@ interface CreateAdminBody {
     state: string
   }
   prayerTimings: {
-    fajr: string
-    dhuhr: string
-    asr: string
-    maghrib: string
-    isha: string
-    juma?: string
+    fajr: {
+      adhan: string // "05:30 AM"
+      jamaat: string // "05:45 AM"
+    }
+    dhuhr: {
+      adhan: string
+      jamaat: string
+    }
+    asr: {
+      adhan: string
+      jamaat: string
+    }
+    maghrib: {
+      adhan: string
+      jamaat: string
+    }
+    isha: {
+      adhan: string
+      jamaat: string
+    }
+    juma?: {
+      adhan: string
+      jamaat: string
+    }
   }
 }
 
@@ -31,14 +49,14 @@ export const createAdmin = async (
     const { username, password, mosqueName, mosqueLocation, prayerTimings } =
       req.body
 
-    // Check if admin already exists
+    // Check if admin exists
     const existingAdmin = await Admin.findOne({ username })
     if (existingAdmin) {
       res.status(400).json({ error: 'Username already exists' })
       return
     }
 
-    // Create mosque first
+    // Create mosque
     const mosque = new Mosque({
       name: mosqueName,
       location: mosqueLocation,
@@ -46,10 +64,10 @@ export const createAdmin = async (
     })
     await mosque.save()
 
-    // Create admin with mosque reference
+    // Create admin
     const admin = new Admin({
       username,
-      password, // Will be hashed by mongoose pre-save hook
+      password,
       mosqueId: mosque._id,
     })
     await admin.save()

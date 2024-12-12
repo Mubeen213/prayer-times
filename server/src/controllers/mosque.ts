@@ -17,12 +17,30 @@ interface CreateMosqueBody {
     state: string
   }
   prayerTimings: {
-    fajr: string
-    dhuhr: string
-    asr: string
-    maghrib: string
-    isha: string
-    juma?: string
+    fajr: {
+      adhan: string // "05:30 AM"
+      jamaat: string // "05:45 AM"
+    }
+    dhuhr: {
+      adhan: string
+      jamaat: string
+    }
+    asr: {
+      adhan: string
+      jamaat: string
+    }
+    maghrib: {
+      adhan: string
+      jamaat: string
+    }
+    isha: {
+      adhan: string
+      jamaat: string
+    }
+    juma?: {
+      adhan: string
+      jamaat: string
+    }
   }
 }
 
