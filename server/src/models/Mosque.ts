@@ -54,6 +54,14 @@ const mosqueSchema = new mongoose.Schema<IMosque>(
   { timestamps: true }
 )
 
+mosqueSchema.index({
+  'location.address': 'text',
+  'location.landmark': 'text',
+  'location.city': 'text',
+})
+
+mosqueSchema.index({ name: 'text' })
+
 mosqueSchema.pre('save', function (next) {
   const timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9]\s(AM|PM)$/
   const timings = this.prayerTimings as PrayerTimings
