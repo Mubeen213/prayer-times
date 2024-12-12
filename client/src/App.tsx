@@ -1,21 +1,45 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+// src/App.tsx
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      retry: 1,
+    },
+  },
+})
 
 const AdminApp = lazy(() => import('./admin/AdminApp'))
 const PublicApp = lazy(() => import('./public/publicApp'))
 
+const router = createBrowserRouter([
+  {
+    path: '/admin/*',
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <AdminApp />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/*',
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <PublicApp />
+      </Suspense>
+    ),
+  },
+])
+
 function App() {
   return (
-    <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <Toaster position='top-right' />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path='/admin/*' element={<AdminApp />} />
-          <Route path='/*' element={<PublicApp />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   )
 }
 
