@@ -6,6 +6,10 @@ import authRoutes from './routes/auth.js'
 import mosqueRoutes from './routes/mosque.js'
 import eventRoutes from './routes/events.js'
 import adminRoutes from './routes/admin.js'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 app.use(morgan('dev'))
@@ -17,6 +21,12 @@ app.use('/api/admin', adminRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/mosques', mosqueRoutes)
 app.use('/api/events', eventRoutes)
+
+// After routes
+app.use(express.static(path.join(__dirname, '../../client/dist')))
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'))
+})
 
 const PORT = process.env.PORT || 5001
 
