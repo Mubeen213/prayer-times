@@ -1,3 +1,18 @@
+export type PrayerName = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | 'juma'
+
+export interface PrayerTime {
+  adhan: string
+  jamaat: string
+}
+
+export interface PrayerTimings {
+  fajr: PrayerTime
+  dhuhr: PrayerTime
+  asr: PrayerTime
+  maghrib: PrayerTime
+  isha: PrayerTime
+  juma?: PrayerTime
+}
 export interface Mosque {
   _id: string
   name: string

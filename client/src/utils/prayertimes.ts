@@ -58,3 +58,22 @@ export const getNextPrayer = (prayerTimings: PrayerTimings) => {
     jamaat: nextPrayer.jamaat,
   }
 }
+
+export const convert24to12 = (time24: string) => {
+  const [hours, minutes] = time24.split(':')
+  const hour = parseInt(hours)
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 || 12
+  return `${hour12}:${minutes} ${ampm}`
+}
+
+export const convert12to24 = (time12: string) => {
+  const [time, modifier] = time12.split(' ')
+  const [hours, minutes] = time.split(':')
+  let hour = parseInt(hours)
+
+  if (modifier === 'PM' && hour !== 12) hour += 12
+  if (modifier === 'AM' && hour === 12) hour = 0
+
+  return `${hour.toString().padStart(2, '0')}:${minutes}`
+}

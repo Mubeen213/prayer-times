@@ -1,16 +1,9 @@
-import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { Outlet } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { useAdminMosque } from '../hooks/useMosques'
-import { MosqueSelection } from './MosqueSelection'
-import { MosqueManagement } from './MosqueManagement'
-import { Mosque } from '../types/mosque'
-
+import { useAuth } from '../hooks/useAuth'
 export const AdminLayout = () => {
-  const [selectedMosque, setSelectedMosque] = useState<Mosque | null>(null)
   const { logout } = useAuth()
   const navigate = useNavigate()
-  const { data: mosques, isLoading } = useAdminMosque()
 
   const handleLogout = () => {
     logout()
@@ -18,31 +11,29 @@ export const AdminLayout = () => {
   }
 
   return (
-    <div className='space-y-6 p-6'>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-2xl font-bold text-gray-900'>
-          {selectedMosque ? 'Manage Mosque' : 'Select Mosque'}
-        </h1>
-        <button
-          onClick={handleLogout}
-          className='px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors'
-        >
-          Logout
-        </button>
-      </div>
+    <div className='min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+        {/* Header */}
+        <div className='bg-white rounded-lg shadow-sm p-6 mb-8'>
+          <div className='flex justify-between items-center'>
+            <h1 className='text-2xl font-bold text-gray-900'>
+              Prayer Track Admin
+            </h1>
+            <button
+              onClick={handleLogout}
+              className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50'
+            >
+              <svg className='w-4 h-4 mr-2' /* ... */ />
+              Logout
+            </button>
+          </div>
+        </div>
 
-      {selectedMosque ? (
-        <MosqueManagement
-          mosque={selectedMosque}
-          onBack={() => setSelectedMosque(null)}
-        />
-      ) : (
-        <MosqueSelection
-          mosques={mosques || []}
-          onSelect={setSelectedMosque}
-          isLoading={isLoading}
-        />
-      )}
+        {/* Content */}
+        <div className='bg-white rounded-lg shadow-sm'>
+          <Outlet />
+        </div>
+      </div>
     </div>
   )
 }
