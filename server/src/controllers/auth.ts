@@ -31,10 +31,10 @@ export const login = async (
 
     const token = generateToken({
       id: admin._id.toString(),
-      mosqueId: (admin.mosqueId ?? '').toString(),
+      adminId: admin._id.toString(),
     })
 
-    res.json({ token, mosqueId: admin.mosqueId })
+    res.json({ token })
   } catch (error) {
     res.status(500).json({ error: 'Server error' })
   }

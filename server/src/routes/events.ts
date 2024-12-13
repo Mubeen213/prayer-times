@@ -12,9 +12,18 @@ import { validateMosqueOwnership } from '../middleware/validateMosqueOwnership.j
 const router = Router()
 
 router.get('/', getAllEvents)
-router.get('/:mosqueId', getMosqueEvents)
-router.post('/:mosqueId', [auth, validateMosqueOwnership], createEvent)
-router.patch('/:mosqueId', [auth, validateMosqueOwnership], updateEvent)
-router.delete('/:mosqueId', [auth, validateMosqueOwnership], deleteEvent)
+router.get('/all', getAllEvents)
+router.get('/mosque/:mosqueId', getMosqueEvents)
+router.post('/mosque/:mosqueId', [auth, validateMosqueOwnership], createEvent)
+router.patch(
+  '/mosque/:mosqueId/event/:eventId',
+  [auth, validateMosqueOwnership],
+  updateEvent
+)
+router.delete(
+  '/mosque/:mosqueId/event/:eventId',
+  [auth, validateMosqueOwnership],
+  deleteEvent
+)
 
 export default router

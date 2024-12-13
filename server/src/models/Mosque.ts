@@ -16,6 +16,7 @@ interface PrayerTimings {
 
 interface IMosque extends Document {
   name: string
+  adminId: mongoose.Schema.Types.ObjectId
   location: {
     address: string
     landmark?: string
@@ -36,6 +37,12 @@ const prayerTimeSchema = new mongoose.Schema(
 const mosqueSchema = new mongoose.Schema<IMosque>(
   {
     name: { type: String, required: true },
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Admin',
+      required: true,
+    },
+
     location: {
       address: { type: String, required: true },
       landmark: String,

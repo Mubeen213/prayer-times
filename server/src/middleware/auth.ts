@@ -6,7 +6,6 @@ interface AuthRequest extends Request {
   admin?: {
     id: string
     username: string
-    mosqueId: string
   }
 }
 
@@ -35,7 +34,6 @@ export const auth = async (
     req.admin = {
       id: admin._id.toString(),
       username: admin.username,
-      mosqueId: admin.mosqueId?.toString() ?? '',
     }
     next()
   } catch (error) {
