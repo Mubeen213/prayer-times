@@ -16,7 +16,7 @@ interface AuthRequest extends Request {
   }
 }
 
-export const createAdmin = async (
+export const createAdminAndMosque = async (
   req: Request<{}, {}, CreateAdminBody>,
   res: Response
 ): Promise<void> => {
@@ -25,17 +25,16 @@ export const createAdmin = async (
       req.body
 
     // Check if admin exists
-    const existingAdmin = await Admin.findOne({ username })
-    if (existingAdmin) {
-      res.status(400).json({ error: 'Username already exists' })
-      return
+    let admin = await Admin.findOne({ username })
+    if (admin) {
+      console.log('Admin already exists, creating mosque only')
+    } else {
+      admin = new Admin({
+        username,
+        password,
+      })
+      await admin.save()
     }
-
-    const admin = new Admin({
-      username,
-      password,
-    })
-    await admin.save()
 
     // Create mosque
     const mosque = new Mosque({
@@ -75,6 +74,7 @@ export const createMosque = async (
     await mosque.save()
     res.status(201).json(mosque)
   } catch (error) {
+    console.error('Mosque creation error:', error)
     res.status(500).json({ error: 'Error creating mosque' })
   }
 }

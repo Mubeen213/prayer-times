@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
   getAdminMosques,
-  createMosque,
+  createAdminAndMosque,
   updatePrayerTimes,
   createEvent,
   getAllEvents,
@@ -15,7 +15,7 @@ const router = Router()
 
 // Mosque Management
 router.get('/mosques', auth, getAdminMosques)
-router.post('/mosques', auth, createMosque)
+router.post('/mosques', auth, createAdminAndMosque)
 router.patch(
   '/mosques/:id/prayer-times',
   auth,
