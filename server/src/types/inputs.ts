@@ -1,3 +1,11 @@
+import { Request } from 'express'
+
+export interface AuthRequest extends Request {
+  admin?: {
+    id: string
+  }
+}
+
 export interface CreateAdminBody {
   username: string
   password: string
@@ -71,4 +79,17 @@ export interface CreateMosqueBody {
       jamaat: string
     }
   }
+}
+
+export interface EventBody {
+  title: string
+  scholar: string
+  description: string
+  date: string
+  time: string
+  mosqueId: string
+}
+
+export interface UpdateEventBody extends Partial<EventBody> {
+  eventId: string
 }

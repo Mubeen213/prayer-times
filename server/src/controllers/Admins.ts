@@ -1,9 +1,14 @@
 import { Request, Response } from 'express'
 import { Admin } from '../models/Admin.js'
+import { Event } from '../models/Event.js'
 import { Mosque } from '../models/Mosque.js'
-import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
-import { CreateAdminBody, CreateMosqueBody } from '../types/inputs.js'
+import {
+  CreateAdminBody,
+  CreateMosqueBody,
+  UpdateEventBody,
+  EventBody,
+} from '../types/inputs.js'
 
 interface AuthRequest extends Request {
   admin?: {
@@ -122,5 +127,94 @@ export const updatePrayerTimes = async (
   } catch (error) {
     console.error('Update prayer times error:', error)
     res.status(500).json({ error: 'Error updating prayer times' })
+  }
+}
+
+// Events controller
+
+export const createEvent = async (
+  req: AuthRequest & { body: EventBody },
+  res: Response
+): Promise<void> => {
+  try {
+    const { mosqueId } = req.params
+    const event = new Event({
+      ...req.body,
+      mosqueId,
+    })
+    await event.save()
+    res.status(201).json(event)
+  } catch (error) {
+    console.error('Event creation error:', error)
+    res.status(500).json({ error: 'Error creating event' })
+  }
+}
+
+export const getAllEvents = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { mosqueId } = req.params
+    const events = await Event.find({ mosqueId })
+      .populate('mosque', 'name location')
+      .lean()
+      .sort({ date: -1, time: -1 })
+      .limit(30)
+    res.json(events)
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching all events' })
+  }
+}
+
+export const updateEvent = async (
+  req: AuthRequest & { body: UpdateEventBody },
+  res: Response
+): Promise<void> => {
+  try {
+    const { ...updateData } = req.body
+    const { mosqueId, eventId } = req.params
+    console.log('updateEventData', updateData)
+    console.log('eventId', eventId)
+    console.log('mosqueId', mosqueId)
+    const event = await Event.findOne({
+      _id: eventId,
+      mosqueId,
+    })
+
+    if (!event) {
+      res.status(404).json({ error: 'Event not found or unauthorized' })
+      return
+    }
+
+    Object.assign(event, updateData)
+    await event.save()
+    res.json(event)
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating event' })
+  }
+}
+
+export const deleteEvent = async (
+  req: AuthRequest & { body: { eventId: string } },
+  res: Response
+): Promise<void> => {
+  try {
+    const { eventId } = req.params
+    const { mosqueId } = req.params
+    const event = await Event.findOneAndDelete({
+      _id: eventId,
+      mosqueId,
+    })
+
+    if (!event) {
+      res.status(404).json({ error: 'Event not found or unauthorized' })
+      return
+    }
+
+    res.status(204).send()
+  } catch (error) {
+    console.log('Error deleting event:', error)
+    res.status(500).json({ error: 'Error deleting event' })
   }
 }

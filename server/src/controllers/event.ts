@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { Event, EventDocument } from '../models/Event.js'
-import { Admin } from '../models/Admin.js'
 
 interface AuthRequest extends Request {
   admin?: {
@@ -9,39 +8,10 @@ interface AuthRequest extends Request {
   }
 }
 
-interface EventBody {
-  title: string
-  scholar: string
-  description: string
-  date: string
-  time: string
-}
-
-interface UpdateEventBody extends Partial<EventBody> {
-  eventId: string
-}
-
 const getTwoHoursAgo = () => {
   const date = new Date()
   date.setHours(date.getHours() - 2)
   return date
-}
-
-export const createEvent = async (
-  req: AuthRequest & { body: EventBody },
-  res: Response
-): Promise<void> => {
-  try {
-    const event = new Event({
-      ...req.body,
-      mosqueId: req.admin?.mosqueId,
-    })
-    await event.save()
-    res.status(201).json(event)
-  } catch (error) {
-    console.error('Event creation error:', error)
-    res.status(500).json({ error: 'Error creating event' })
-  }
 }
 
 export const getAllEvents = async (
@@ -109,56 +79,5 @@ export const getMosqueEvents = async (
     res.json(events)
   } catch (error) {
     res.status(500).json({ error: 'Error fetching mosque events' })
-  }
-}
-export const updateEvent = async (
-  req: AuthRequest & { body: UpdateEventBody },
-  res: Response
-): Promise<void> => {
-  try {
-    const { eventId, ...updateData } = req.body
-    const { mosqueId } = req.params
-    console.log('updateEventData', updateData)
-
-    const event = await Event.findOne({
-      _id: eventId,
-      mosqueId,
-    })
-
-    if (!event) {
-      res.status(404).json({ error: 'Event not found or unauthorized' })
-      return
-    }
-
-    Object.assign(event, updateData)
-    await event.save()
-    res.json(event)
-  } catch (error) {
-    res.status(500).json({ error: 'Error updating event' })
-  }
-}
-
-export const deleteEvent = async (
-  req: AuthRequest & { body: { eventId: string } },
-  res: Response
-): Promise<void> => {
-  try {
-    const { eventId } = req.body
-    const { mosqueId } = req.params
-
-    const event = await Event.findOneAndDelete({
-      _id: eventId,
-      mosqueId,
-    })
-
-    if (!event) {
-      res.status(404).json({ error: 'Event not found or unauthorized' })
-      return
-    }
-
-    res.status(204).send()
-  } catch (error) {
-    console.log('Error deleting event:', error)
-    res.status(500).json({ error: 'Error deleting event' })
   }
 }
