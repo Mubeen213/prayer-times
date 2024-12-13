@@ -5,17 +5,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem('adminToken')
   )
-
-  const login = () => {
-    const newToken = 'newToken'
+  const login = (newToken: string) => {
     localStorage.setItem('adminToken', newToken)
     setToken(newToken)
   }
 
-  const logout = async () => {
+  const logout = () => {
     localStorage.removeItem('adminToken')
     setToken(null)
-    return Promise.resolve()
   }
 
   const value = {

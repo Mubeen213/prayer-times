@@ -1,23 +1,25 @@
 import { Routes, Route } from 'react-router-dom'
-import { AdminLayout } from '../components/AdminLayout'
+import { AdminLayout } from './AdminLayout'
 import { Login } from './Login'
-// import { Dashboard } from '../pages/Dashboard'
-// import { ProtectedRoute } from '../components/ProtectedRoute'
+import { ProtectedRoute } from '../components/ProtectedRoute'
+import { AuthProvider } from '../context/AuthProvider'
 
 export default function AdminApp() {
   return (
-    <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route
-        path='/'
-        element={
-          //   <ProtectedRoute>
-          <AdminLayout />
-          //   </ProtectedRoute>
-        }
-      >
-        {/* <Route path='/dashboard' element={<Dashboard />} /> */}
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route
+          path='/'
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          {/* <Route path='/dashboard' element={<Dashboard />} /> */}
+        </Route>
+      </Routes>
+    </AuthProvider>
   )
 }

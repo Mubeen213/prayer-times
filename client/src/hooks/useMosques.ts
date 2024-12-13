@@ -44,11 +44,21 @@ export const useMosque = (mosqueId: string) => {
   })
 }
 
+export const useAdminMosque = () => {
+  return useQuery({
+    queryKey: ['admin-mosques'],
+    queryFn: async () => {
+      const { data } = await api.get<Mosque[]>('admin/mosques')
+      return data
+    },
+  })
+}
+
 export const useMosqueEvents = (mosqueId: string, enabled: boolean) => {
   return useQuery({
     queryKey: ['mosque-events', mosqueId],
     queryFn: async () => {
-      const { data } = await api.get(`/events/${mosqueId}`)
+      const { data } = await api.get(`/events/mosque/${mosqueId}`)
       return data
     },
     enabled: enabled,

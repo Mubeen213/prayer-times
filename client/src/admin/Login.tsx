@@ -1,20 +1,26 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-
+import { api } from '../config/axios'
+import { useAuth } from '../hooks/useAuth'
 export const Login = () => {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { login } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      // Add auth logic here
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const { data } = await api.post('/auth/login', {
+        username,
+        password,
+      })
+
+      login(data.token)
       navigate('/admin')
     } catch (error) {
       console.error(error)
