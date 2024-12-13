@@ -5,10 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
+    "start": "node dist/index.js",
     "dev": "nodemon --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "tsc && cp package.json dist/",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
   },
   "keywords": [],
   "author": "",
