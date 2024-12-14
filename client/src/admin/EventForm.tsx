@@ -46,7 +46,7 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='bg-white rounded-lg shadow-sm space-y-6'
+      className='bg-white rounded-lg p-2 shadow-sm space-y-6'
     >
       <div className='flex justify-between items-center mb-4'>
         <h3 className='text-lg font-medium text-gray-900'>
@@ -68,7 +68,7 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
       </div>
 
       <div>
-        <label className='block text-sm font-medium text-gray-700'>
+        <label className='p-2 block text-sm font-medium text-gray-700'>
           Scholar Name
         </label>
         <input
@@ -83,7 +83,7 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
       </div>
 
       <div>
-        <label className='block text-sm font-medium text-gray-700'>
+        <label className='p-2 block text-sm font-medium text-gray-700'>
           Description
         </label>
         <textarea
