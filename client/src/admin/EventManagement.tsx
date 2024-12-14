@@ -19,7 +19,7 @@ export const EventManagement = ({ mosqueId }: EventManagementProps) => {
 
   return (
     <div className='space-y-6'>
-      <div className='flex justify-between items-center'>
+      <div className='flex justify-between items-center '>
         <h2 className='text-lg font-semibold text-gray-900'>Events</h2>
         <button
           onClick={() => (isFormOpen ? handleClose() : setIsFormOpen(true))}
