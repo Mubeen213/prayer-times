@@ -44,14 +44,17 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-6'>
+    <form
+      onSubmit={handleSubmit}
+      className='bg-white rounded-lg shadow-sm p-6 space-y-6'
+    >
       <div className='flex justify-between items-center mb-4'>
         <h3 className='text-lg font-medium text-gray-900'>
           {event ? 'Edit Event' : 'Create Event'}
         </h3>
       </div>
       <div>
-        <label className='block text-sm font-medium text-gray-700'>
+        <label className='p-2 block text-sm font-medium text-gray-700'>
           Event Title
         </label>
         <input
@@ -59,12 +62,13 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
           required
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className='p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm'
+          className='w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent hover:bg-white transition-colors duration-200'
+          placeholder='Enter event title'
         />
       </div>
 
       <div>
-        <label className='block text-sm font-medium text-gray-700'>
+        <label className='p-2 block text-sm font-medium text-gray-700'>
           Scholar Name
         </label>
         <input
@@ -73,12 +77,13 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
           onChange={(e) =>
             setFormData({ ...formData, scholar: e.target.value })
           }
-          className='p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm'
+          className='w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent hover:bg-white transition-colors duration-200'
+          placeholder='Enter Scholar name'
         />
       </div>
 
       <div>
-        <label className='block text-sm font-medium text-gray-700'>
+        <label className='p-2 block text-sm font-medium text-gray-700'>
           Description
         </label>
         <textarea
@@ -88,7 +93,8 @@ export const EventForm = ({ mosqueId, event, onClose }: EventFormProps) => {
             setFormData({ ...formData, description: e.target.value })
           }
           rows={3}
-          className='p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm'
+          className='w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent hover:bg-white transition-colors duration-200'
+          placeholder='Enter Description'
         />
       </div>
 
